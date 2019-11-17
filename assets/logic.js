@@ -17,8 +17,8 @@ var frequency = "";
 var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
 var currentTime = moment();
 var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-var tRemainder = diffTime % frequency;
-var tMinutesTillTrain = frequency - tRemainder;
+var tRemainder = diffTime % tfrequency;
+var tMinutesTillTrain = tfrequency - tRemainder;
 var nextTrain = moment().add(tMinutesTillTrain, "minutes");
 
 $("button").on("click", function (event) {
@@ -28,20 +28,19 @@ $("button").on("click", function (event) {
     var name = $("#train-name").val().trim();
     var destination = $("#train-des").val().trim();
     var firstTime = $("#train-first").val().trim();
-    var frequency = $("#train-min").val().trim();
+    var tfrequency = $("#train-min").val().trim();
 
     // Code for "Setting values in the database"
-    database.ref().push({
+    database.ref().set({
         name: name,
         destination: destination,
         firstTime: firstTime,
-        frequency: frequency
-        
-        
+        frequency: frequency,
+        // tMinutesTillTrain: tMinutesTillTrain
         
     });
     console.log(name, destination, firstTime, frequency);
-});
+
 
 database.ref().on("value", function (snapshot) {
 
@@ -51,17 +50,25 @@ database.ref().on("value", function (snapshot) {
     console.log(snapshot.val().destination);
     console.log(snapshot.val().firstTime);
     console.log(snapshot.val().frequency);
-
+    console.log(snapshot.val().tMinutesTillTrain);
+    console.log(snapshot.val().nextTrain);
     // Change the HTML to reflect
-    $("#name-display").html(snapshot.val().name);
-    $("#des-display").html(snapshot.val().destination);
-    $("#first-display").html(snapshot.val().firstTime);
-    $("#freq-display").html(snapshot.val().frequency);
-    $("#next-display").html(snapshot.val().nextTrain);
-    $("#min-display").html(snapshot.val().tRemainder);
-    $("tbody").prepend(name, destination, firstTime, frequency);
+    // $("#name-display").text(snapshot.val().name);
+    // $("#des-display").text(snapshot.val().destination);
+    // $("#first-display").text(snapshot.val().firstTime);
+    // $("#freq-display").text(snapshot.val().frequency);
+    // $("#next-display").text(snapshot.val().nextTrain);
+    // $("#min-display").text(snapshot.val().tMinutesTillTrain);
+    // $("#train-section").prepend(name, destination, firstTime, frequency, tMinutesTillTrain, nextTrain);
+    $("#name-display").text(name);
+    $("#des-display").text(destination);
+    $("#first-display").text(firstTime);
+    $("#freq-display").text(frequency);
+    $("#next-display").text(nextTrain);
+    $("#min-display").text(tMinutesTillTrain);
     // Handle the errors
 }, function (errorObject) {
     console.log("Errors handled: " + errorObject.code);
+});
 });
 database.ref();

@@ -10,65 +10,63 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
-var name = "";
-var destination = "";
-var firstTime = "";
-var frequency = "";
-var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
-var currentTime = moment();
-var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-var tRemainder = diffTime % tfrequency;
-var tMinutesTillTrain = tfrequency - tRemainder;
-var nextTrain = moment().add(tMinutesTillTrain, "minutes");
 
 $("button").on("click", function (event) {
     event.preventDefault();
-
     // Grabbed values from text-boxes
     var name = $("#train-name").val().trim();
     var destination = $("#train-des").val().trim();
     var firstTime = $("#train-first").val().trim();
-    var tfrequency = $("#train-min").val().trim();
-
+    var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
+    var currentTime = moment();
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    var frequency = $("#train-min").val().trim();
+    var tRemainder = diffTime % frequency;
+    var tMinutesTillTrain = frequency - tRemainder;
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes").format("LT");
     // Code for "Setting values in the database"
-    database.ref().set({
+    database.ref().push({
         name: name,
         destination: destination,
         firstTime: firstTime,
         frequency: frequency,
-        // tMinutesTillTrain: tMinutesTillTrain
-        
+        nextTrain: nextTrain,
+        tRemainder: tRemainder,
+        diffTime: diffTime,
+        tMinutesTillTrain: tMinutesTillTrain
     });
-    console.log(name, destination, firstTime, frequency);
-
-
-database.ref().on("value", function (snapshot) {
-
+});
+database.ref().on("child_added", function (snapshot) {
     // Log everything that's coming out of snapshot
     console.log(snapshot.val());
     console.log(snapshot.val().name);
     console.log(snapshot.val().destination);
     console.log(snapshot.val().firstTime);
     console.log(snapshot.val().frequency);
-    console.log(snapshot.val().tMinutesTillTrain);
+    console.log(snapshot.val().tRemainder);
     console.log(snapshot.val().nextTrain);
+    console.log(snapshot.val().diffTime);
+    console.log(snapshot.val().tRemainder);
     // Change the HTML to reflect
-    // $("#name-display").text(snapshot.val().name);
-    // $("#des-display").text(snapshot.val().destination);
-    // $("#first-display").text(snapshot.val().firstTime);
-    // $("#freq-display").text(snapshot.val().frequency);
-    // $("#next-display").text(snapshot.val().nextTrain);
-    // $("#min-display").text(snapshot.val().tMinutesTillTrain);
-    // $("#train-section").prepend(name, destination, firstTime, frequency, tMinutesTillTrain, nextTrain);
-    $("#name-display").text(name);
-    $("#des-display").text(destination);
-    $("#first-display").text(firstTime);
-    $("#freq-display").text(frequency);
-    $("#next-display").text(nextTrain);
-    $("#min-display").text(tMinutesTillTrain);
-    // Handle the errors
+    // prev search
+    var prevName = $("<td>").html(snapshot.val().name);
+    var prevDes = $("<td>").html(snapshot.val().destination);
+    var prevFreq = $("<td>").html(snapshot.val().frequency);
+    var prevNext = $("<td>").html(snapshot.val().nextTrain);
+    var prevMin = $("<td>").html(snapshot.val().tRemainder);
+    var rowDis = $("<tr>").append(prevName, prevDes, prevFreq, prevNext, prevMin);
+    $("#prev-train-section").append(rowDis);
 }, function (errorObject) {
     console.log("Errors handled: " + errorObject.code);
 });
+database.ref().limitToLast(1).on("child_added", function(snap){
+    var prevName = $("<td>").html(snap.val().name);
+    var prevDes = $("<td>").html(snap.val().destination);
+    var prevFreq = $("<td>").html(snap.val().frequency);
+    var prevNext = $("<td>").html(snap.val().nextTrain);
+    var prevMin = $("<td>").html(snap.val().tRemainder);
+    var rowDis = $("<tr>").append(prevName, prevDes, prevFreq, prevNext, prevMin);
+    $("#train-recent").append(rowDis);
+}, function (errorObject) {
+    console.log("Errors handled: " + errorObject.code);
 });
-database.ref();

@@ -30,12 +30,13 @@
                     <div class="card">
                         <div class="card-header">
                             <strong>
-                                <i class="giphy-list-alt"></i><h4> Add Train</h4></strong>
+                                <h4> Add Train</h4>
+                            </strong>
                         </div>
                         <div class="card-body">
                             <form role="form">
                                 <div class="form-group">
-                                    <label for="train-name">Train name:</label>
+                                    <label >Train name:</label>
                                     <input type="text" class="form-control" id="train-name">
                                 </div>
                                 <div class="form-group">
@@ -48,7 +49,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="train-min">Frequency (min):</label>
-                                    <input type="text" class="form-control" id="train-min">
+                                    <input type="number" class="form-control" id="train-min">
                                 </div>
 
                                 <button type="submit" class="btn btn-default" id="run-search">
@@ -64,12 +65,12 @@
                     <div class="card">
                         <div class="card-header">
                             <strong>
-                                <i class="train-table"></i><h4>Recent Search</h4></strong>
+                                <h4>Recent Search</h4>
+                            </strong>
                         </div>
                         <div class="card-body">
                             <table class="table">
                                 <thead class="thead-light">
-                                    
                                     <tr>
                                         <th scope="col">Train Name</th>
                                         <th scope="col">Destination</th>
@@ -98,12 +99,12 @@
                     <div class="card">
                         <div class="card-header">
                             <strong>
-                                <i class="train-table"></i><h4>Previous Searches</h4></strong>
+                                <h4>Previous Searches</h4>
+                            </strong>
                         </div>
-                        <div class="card-body" >
+                        <div class="card-body">
                             <table class="table">
                                 <thead class="thead-light">
-                                    
                                     <tr>
                                         <th scope="col">Train Name</th>
                                         <th scope="col">Destination</th>
@@ -112,13 +113,13 @@
                                         <th scope="col">Minutes Away</th>
                                     </tr>
                                 </thead>
-                                <tbody id="train-section">
+                                <tbody id="prev-train-section">
                                     <tr>
-                                        <td id="name-display"></td>
-                                        <td id="des-display"></td>
-                                        <td id="freq-display"></td>
-                                        <td id="next-display"></td>
-                                        <td id="min-display"></td>
+                                        <td id="prev-name-display"></td>
+                                        <td id="prev-des-display"></td>
+                                        <td id="prev-freq-display"></td>
+                                        <td id="prev-next-display"></td>
+                                        <td id="prev-min-display"></td>
                                     </tr>
                                 </tbody>
                             </table>
